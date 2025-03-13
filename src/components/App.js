@@ -30,10 +30,6 @@ const PrivateRoute = ({ children, isLoggedin }) => {
   );
 };
 
-const PrivateR = ({ children, isLoggedin }) => {
-  return isLoggedin ? children : <Navigate to="/user" replace />;
-};
-
 class App extends React.Component {
   componentDidMount() {
     this.props.dispatch(fetchPosts());
@@ -84,11 +80,12 @@ class App extends React.Component {
             <Route
               path="/user"
               element={
-                <PrivateR isLoggedin={auth.isLoggedin}>
+                <PrivateRoute isLoggedin={auth.isLoggedin}>
                   <UserProfile />
-                </PrivateR>
+                </PrivateRoute>
               }
             />
+
             <Route path="*" element={<Page404 />} />
           </Routes>
         </div>

@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
+import { useParams } from 'react-router-dom';
 import image from '../components/img/images.png';
 
 class UserProfile extends Component {
   componentDidMount() {
-    const { match } = this.props;
+    const { id } = this.props.params; // Get userId from props
 
-    if (match.params.userId) {
+    if (id) {
       // dispatch an action
+      console.log('User ID:', id);
     }
   }
 
   render() {
-    const {
-      match: { params },
-    } = this.props;
-    console.log('this.props', params);
+    const { id } = this.props.params;
+    console.log('this.props', this.props);
 
     return (
       <div className="settings">
@@ -40,4 +40,10 @@ class UserProfile extends Component {
   }
 }
 
-export default UserProfile;
+// Wrapper function to pass URL params to class component
+const UserProfileWithParams = (props) => {
+  const params = useParams();
+  return <UserProfile {...props} params={params} />;
+};
+
+export default UserProfileWithParams;
