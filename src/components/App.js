@@ -44,7 +44,7 @@ class App extends React.Component {
         const user = jwtDecode(token);
         this.props.dispatch(
           authenticateUser({
-            _id: user._id, // Ensure this matches your token's structure
+            id: user.id, // Ensure this matches your token's structure
             name: user.name,
             email: user.email,
           }),

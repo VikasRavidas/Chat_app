@@ -121,7 +121,7 @@ export function editUserFailed(error) {
   return { type: EDIT_USER_FAILED, error };
 }
 
-export function editUser(userId, name, password, confirmPassword) {
+export function editUser(id, name, password, confirmPassword) {
   return (dispatch) => {
     const url = APIUrls.editProfile();
     fetch(url, {
@@ -130,7 +130,7 @@ export function editUser(userId, name, password, confirmPassword) {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${getAuthTokenFromLocalStorage()}`,
       },
-      body: JSON.stringify({ userId, name, password, confirmPassword }),
+      body: JSON.stringify({ id, name, password, confirmPassword }),
     })
       .then(async (response) => {
         const data = await response.json();
@@ -142,6 +142,7 @@ export function editUser(userId, name, password, confirmPassword) {
         if (u) {
           localStorage.setItem('token', u);
         }
+        console.log('userId: ', data.user.id);
         dispatch(editUserSuccesful(data.user));
       })
       .catch((error) => {

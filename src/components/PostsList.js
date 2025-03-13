@@ -10,7 +10,7 @@ class PostsList extends Component {
     return (
       <div className="posts-list">
         {posts.map((post) => (
-          <div className="post-wrapper" key={post._id}>
+          <div className="post-wrapper" key={post.id}>
             <div className="post-header">
               <div className="post-avatar">
                 <img src={images} alt="user-pic" />
