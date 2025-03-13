@@ -24,6 +24,10 @@ class Settings extends Component {
 
     this.props.dispatch(editUser(user.id, name, password, confirmPassword));
   };
+  componentWillUnmount() {
+    this.props.dispatch(clearAuthState());
+  }
+
   render() {
     const { user, error } = this.props.auth;
     const { editMode } = this.state;

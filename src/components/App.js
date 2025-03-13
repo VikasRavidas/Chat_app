@@ -38,17 +38,47 @@ class App extends React.Component {
     if (token) {
       try {
         const user = jwtDecode(token);
-        this.props.dispatch(
-          authenticateUser({
-            id: user.id, // Ensure this matches your token's structure
-            name: user.name,
-            email: user.email,
-          }),
-        );
+        const currentTime = Date.now() / 1000; // Convert to seconds
+
+        if (user.exp < currentTime) {
+          // Token expired
+          console.warn('Token expired, logging out user...');
+          this.handleLogout();
+        } else {
+          // Token is still valid
+          this.props.dispatch(
+            authenticateUser({
+              id: user.id,
+              name: user.name,
+              email: user.email,
+            }),
+          );
+
+          // Auto logout when the token expires
+          const timeToExpire = (user.exp - currentTime) * 1000;
+          this.autoLogoutTimer = setTimeout(() => {
+            console.warn('Token expired automatically, logging out user...');
+            this.handleLogout();
+          }, timeToExpire);
+        }
       } catch (error) {
         console.error('Invalid token:', error);
-        localStorage.removeItem('token');
+        this.handleLogout();
       }
+    }
+  }
+
+  // Logout function to clear token and redirect
+  handleLogout = () => {
+    localStorage.removeItem('token');
+    this.props.dispatch(authenticateUser(null)); // Clear auth state
+    window.location.href = '/login'; // Redirect to login page
+  };
+
+  // Clear timeout when component unmounts
+  componentWillUnmount() {
+    if (this.autoLogoutTimer) {
+      clearTimeout(this.autoLogoutTimer);
     }
   }
 
@@ -78,7 +108,7 @@ class App extends React.Component {
               }
             />
             <Route
-              path="/user"
+              path="/user/:id"
               element={
                 <PrivateRoute isLoggedin={auth.isLoggedin}>
                   <UserProfile />

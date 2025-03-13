@@ -3,6 +3,7 @@ import images from './img/images.png';
 import PropTypes from 'prop-types';
 import like from './img/love.jpeg';
 import comment_icon from './img/comment_icon.png';
+import { Link } from 'react-router-dom';
 
 class PostsList extends Component {
   render() {
@@ -13,7 +14,9 @@ class PostsList extends Component {
           <div className="post-wrapper" key={post.id}>
             <div className="post-header">
               <div className="post-avatar">
-                <img src={images} alt="user-pic" />
+                <Link to={`/user/${post.id}`}>
+                  <img src={images} alt="user-pic" />
+                </Link>
                 <div>
                   <span className="post-author">{post.user.name}</span>
                   <span className="post-time">a minute ago</span>
