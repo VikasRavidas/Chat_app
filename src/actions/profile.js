@@ -42,7 +42,7 @@ export function fetchUserProfile(id) {
         dispatch(userProfileSuccess(data.user));
       })
       .catch((error) => {
-        dispatch(userProfileFailed(error));
+        console.log('fetch user friend error: ', error);
       });
   };
 }

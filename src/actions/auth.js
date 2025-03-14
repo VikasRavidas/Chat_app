@@ -10,6 +10,7 @@ import {
 import { APIUrls } from '../helpers/urls';
 import { SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED } from './actionTypes';
 import { getAuthTokenFromLocalStorage } from '../helpers/utils';
+import { fetchUserFriends } from './friends';
 
 export function startLogin() {
   return { type: LOGIN_START };
@@ -96,10 +97,19 @@ export function signup(name, email, password) {
   };
 }
 
-export const authenticateUser = (user) => ({
-  type: 'AUTHENTICATE_USER',
-  user,
-});
+export const authenticateUser = (user) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'AUTHENTICATE_USER',
+      user,
+    });
+
+    // Fetch friends immediately after authentication
+    if (user?.id) {
+      dispatch(fetchUserFriends(user.id));
+    }
+  };
+};
 
 export function logoutUser() {
   return {

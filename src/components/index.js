@@ -6,5 +6,18 @@ import Page404 from './Page404';
 import Login from './Login';
 import Signup from './SignUp';
 import Setting from './Setting';
+import FriendsList from './FriendsList';
+import FriendsListItem from './FriendsListItem';
 
-export { PostsList, Setting, Signup, Page404, App, Home, Login, Navbar };
+export {
+  PostsList,
+  Setting,
+  Signup,
+  Page404,
+  App,
+  Home,
+  Login,
+  Navbar,
+  FriendsList,
+  FriendsListItem,
+};

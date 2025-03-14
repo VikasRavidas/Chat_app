@@ -19,6 +19,7 @@ import Settings from './Setting';
 
 import { useLocation } from 'react-router-dom';
 import UserProfile from './UserProfile';
+import { fetchUserFriends } from '../actions/friends';
 
 const PrivateRoute = ({ children, isLoggedin }) => {
   const location = useLocation(); // ✅ Get current location
@@ -31,6 +32,14 @@ const PrivateRoute = ({ children, isLoggedin }) => {
 };
 
 class App extends React.Component {
+  componentDidUpdate(prevProps) {
+    if (prevProps.auth.user?.id !== this.props.auth.user?.id) {
+      if (this.props.auth.user) {
+        this.props.dispatch(fetchUserFriends(this.props.auth.user.id));
+      }
+    }
+  }
+
   componentDidMount() {
     this.props.dispatch(fetchPosts());
 
@@ -61,6 +70,7 @@ class App extends React.Component {
             this.handleLogout();
           }, timeToExpire);
         }
+        this.props.dispatch(fetchUserFriends(user.id));
       } catch (error) {
         console.error('Invalid token:', error);
         this.handleLogout();
@@ -83,7 +93,8 @@ class App extends React.Component {
   }
 
   render() {
-    const { posts, auth } = this.props;
+    const { posts, auth, friends } = this.props;
+    console.log('friend in FriendsList: ', friends);
     return (
       <Router>
         <div>
@@ -93,7 +104,11 @@ class App extends React.Component {
               path="/"
               element={
                 <PrivateRoute isLoggedin={auth.isLoggedin}>
-                  <Home posts={posts} />
+                  <Home
+                    posts={posts}
+                    friends={friends}
+                    isLoggedin={auth.isLoggedin}
+                  />
                 </PrivateRoute>
               }
             />
@@ -127,6 +142,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => ({
   posts: state.posts,
   auth: state.auth,
+  friends: state.friends,
 });
 
 App.propTypes = {
