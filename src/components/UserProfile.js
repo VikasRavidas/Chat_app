@@ -14,12 +14,26 @@ class UserProfile extends Component {
     }
   }
 
+  checkIfUserIsAFriend = () => {
+    console.log('this.props', this.props);
+    const { id } = this.props.params;
+    const { friends } = this.props;
+
+    console.log('Friends List:', friends);
+
+    // Using find() instead of map().indexOf()
+    const friend = friends.find((friend) => String(friend.id) === String(id));
+
+    return !!friend; // Returns true if friend exists, otherwise false
+  };
+
   render() {
     const { profile } = this.props;
     const user = profile?.user || {}; // ✅ Ensure `user` exists
     // if (profile.inProgress) {
     //   return <h1>Loading....</h1>;
     // }
+    const isUserAFriend = this.checkIfUserIsAFriend();
     return (
       <div className="settings">
         <div className="img-container">
@@ -37,7 +51,11 @@ class UserProfile extends Component {
         </div>
 
         <div className="btn-grp">
-          <button className="button save-btn">Add Friend</button>
+          {!isUserAFriend ? (
+            <button className="button save-btn">Add Friend</button>
+          ) : (
+            <button className="button save-btn">Remove Friend</button>
+          )}
         </div>
       </div>
     );
@@ -52,7 +70,8 @@ const UserProfileWithParams = (props) => {
 
 // ✅ Connect Redux state and actions to UserProfile
 const mapStateToProps = (state) => ({
-  profile: state.profile, // Adjust this based on your Redux store structure
+  profile: state.profile,
+  friends: state.friends, // Adjust this based on your Redux store structure
 });
 
 const mapDispatchToProps = (dispatch) => ({
