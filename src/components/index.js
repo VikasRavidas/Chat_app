@@ -8,6 +8,7 @@ import Signup from './SignUp';
 import Setting from './Setting';
 import FriendsList from './FriendsList';
 import FriendsListItem from './FriendsListItem';
+import CreatePost from './CreatePost';
 
 export {
   PostsList,
@@ -20,4 +21,5 @@ export {
   Navbar,
   FriendsList,
   FriendsListItem,
+  CreatePost,
 };

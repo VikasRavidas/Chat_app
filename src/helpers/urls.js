@@ -8,4 +8,9 @@ export const APIUrls = {
     `${API_ROOT}/posts?page=${page}&limit=${limit}`,
   userProfile: (id) => `${API_ROOT}/user/${id}`,
   userFriends: () => `${API_ROOT}/friendship/fetch_user_friends`,
+  addFriend: () => `${API_ROOT}/friendship/add`, // ✅ No need to pass ID in URL
+  removeFriend: () => `${API_ROOT}/friendship/remove`,
+  createPost: () => `${API_ROOT}/posts/create`,
+  createComment: () => `${API_ROOT}/comments/`,
+  toggleLike: () => `${API_ROOT}/likes/toggle`,
 };
