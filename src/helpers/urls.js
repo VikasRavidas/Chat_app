@@ -13,4 +13,5 @@ export const APIUrls = {
   createPost: () => `${API_ROOT}/posts/create`,
   createComment: () => `${API_ROOT}/comments/`,
   toggleLike: () => `${API_ROOT}/likes/toggle`,
+  userSearch: () => `${API_ROOT}/users/search`,
 };

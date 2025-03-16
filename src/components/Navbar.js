@@ -5,6 +5,7 @@ import { logoutUser } from '../actions/auth';
 import gif from './img/Tech4.gif';
 import images from './img/images.png';
 import search_icon from './img/search_icon.png';
+import searchUsers from '../actions/Search';
 
 class Navbar extends React.Component {
   logOut = () => {
@@ -12,8 +13,14 @@ class Navbar extends React.Component {
     this.props.dispatch(logoutUser()); // Dispatch logout action
   };
 
+  handleSearch = (e) => {
+    const searchText = e.target.value;
+
+    this.props.dispatch(searchUsers(searchText));
+  };
+
   render() {
-    const { auth } = this.props;
+    const { auth, results } = this.props;
     return (
       <nav className="nav">
         {/* Logo */}
@@ -26,21 +33,23 @@ class Navbar extends React.Component {
         {/* Search Bar */}
         <div className="search-container">
           <img className="search-icon" src={search_icon} alt="search-icon" />
-          <input placeholder="Search" />
+          <input placeholder="Search" onChange={this.handleSearch} />
 
           {/* Dummy search results */}
-          <div className="search-results">
-            <ul>
-              <li className="search-results-row">
-                <img src={images} alt="user-dp" />
-                <span>{auth.isLoggedin ? auth.user.name : 'Guest'}</span>
-              </li>
-              <li className="search-results-row">
-                <img src={images} alt="user-dp" />
-                <span>{auth.isLoggedin ? auth.user.name : 'Guest'}</span>
-              </li>
-            </ul>
-          </div>
+          {results.length > 0 && (
+            <div className="search-results">
+              <ul>
+                {results.map((user) => (
+                  <li className="search-results-row" key={user.id}>
+                    <Link to={`/user/${user.id}`}>
+                      <img src={images} alt="user-dp" />
+                      <span>{user.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Right Navigation */}
@@ -84,6 +93,7 @@ class Navbar extends React.Component {
 // Map Redux state to component props
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  results: state.search.results,
 });
 
 // Connect Navbar to Redux

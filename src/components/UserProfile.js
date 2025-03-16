@@ -16,6 +16,27 @@ class UserProfile extends Component {
       successMessage: null,
     };
   }
+
+  componentDidUpdate(prevProps) {
+    // Handle user ID parameter changes
+    const prevUserId = prevProps.params.id;
+    const currentUserId = this.props.params.id;
+    const prevParams = prevProps.params;
+    const currentParams = this.props.params;
+
+    // Handle friends list updates
+    const prevFriends = prevProps.friends;
+    const currentFriends = this.props.friends;
+
+    if (prevUserId !== currentUserId) {
+      this.props.fetchUserProfile(currentUserId);
+    }
+
+    if (prevFriends !== currentFriends) {
+      this.setState({}); // Force re-render when friends list changes
+    }
+  }
+
   componentDidMount() {
     const { id } = this.props.params; // Get userId from props
     console.log('User ID:', id);
@@ -120,11 +141,6 @@ class UserProfile extends Component {
       });
     }
   };
-  componentDidUpdate(prevProps) {
-    if (prevProps.friends !== this.props.friends) {
-      this.setState({}); // ✅ Trigger a re-render when friends list updates
-    }
-  }
 
   render() {
     const { profile } = this.props;
